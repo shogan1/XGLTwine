@@ -1,0 +1,208 @@
+<tw-storydata name="week2" startnode="9" creator="Twine" creator-version="2.0.11" ifid="29153D21-0093-48FC-9051-129E71F2A64C" format="SugarCube 2 (local/offline)" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">
+
+</style><script role="script" id="twine-user-script" type="text/twine-javascript">
+
+</script><tw-passagedata pid="1" name="shares" tags="" position="926,115">&lt;&lt;set $cosbyValue to random(120,500)&gt;&gt;
+
+/* $cosbyHist is an array with three values, the first value is the OLDEST stock value, the last value is the newest */
+/* Going from say [120,230,340] to [230,340,NEW VALUE] */
+
+&lt;&lt;nobr&gt;&gt;
+
+&lt;&lt;for $i = 0; $i &lt; $cosbyHist.length; $i++&gt;&gt;
+	/* We need a special case for the last iteration (i = cosbyHist.length - 1) */
+	&lt;&lt;if $i is $cosbyHist.length - 1&gt;&gt;
+		&lt;&lt;set $cosbyHist[$i] to $cosbyValue&gt;&gt;
+	&lt;&lt;else&gt;&gt;
+		&lt;&lt;set $cosbyHist[$i] to $cosbyHist[$i+1]&gt;&gt;
+	&lt;&lt;/if&gt;&gt;
+&lt;&lt;/for&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;
+
+Past weeks&#39; share values (oldest to newest): $cosbyHist
+
+$cosbyHist
+
+You have &lt;span id=&quot;money&quot;&gt;$money&lt;/span&gt; dollars to spend.
+
+Cosby is worth $cosbyValue dollars.
+
+You have &lt;span id=&quot;cosbyBuy&quot;&gt;$cosbyShares&lt;/span&gt; Cosby shares.
+
+&lt;&lt;link &quot;Add one cosby share&quot;&gt;&gt;
+  &lt;&lt;if $money &lt; $cosbyValue&gt;&gt;
+      /* Do nothing, don&#39;t have enough money */
+  &lt;&lt;elseif $cosbyShares &lt; 5&gt;&gt;
+ 	 &lt;&lt;set $cosbyShares to $cosbyShares + 1&gt;&gt;
+	 &lt;&lt;set $money to $money - $cosbyValue&gt;&gt;
+ 	 &lt;&lt;replace &quot;#cosbyBuy&quot;&gt;&gt;$cosbyShares&lt;&lt;/replace&gt;&gt;
+  &lt;&lt;/if&gt;&gt;
+  &lt;&lt;replace &quot;#money&quot;&gt;&gt;$money&lt;&lt;/replace&gt;&gt;
+&lt;&lt;/link&gt;&gt;
+
+&lt;&lt;link &quot;Sell one cosby share&quot;&gt;&gt;
+  &lt;&lt;if $cosbyShares == 0&gt;&gt;
+      /* Do nothing */
+  &lt;&lt;elseif $cosbyShares &gt; 0&gt;&gt;
+ 	 &lt;&lt;set $cosbyShares to $cosbyShares - 1&gt;&gt;
+	 &lt;&lt;set $money to $money + $cosbyValue&gt;&gt;
+ 	 &lt;&lt;replace &quot;#cosbyBuy&quot;&gt;&gt;$cosbyShares&lt;&lt;/replace&gt;&gt;
+  &lt;&lt;/if&gt;&gt;
+  &lt;&lt;replace &quot;#money&quot;&gt;&gt;$money&lt;&lt;/replace&gt;&gt;
+&lt;&lt;/link&gt;&gt;
+
+
+&lt;&lt;link &quot;Go to next week!&quot; &quot;shares&quot;&gt;&gt;
+&lt;&lt;/link&gt;&gt;
+
+
+/* 
+
+Cosby is worth $cosby dollars. 
+buy/sell etc...
+
+Past 3 weeks of Cosby value:
+
+$cosbyHist
+
+*/</tw-passagedata>
+<tw-passagedata pid="2" name="StoryInit" tags="" position="60,323">&lt;&lt;set $cosbyHist to [random(120,600),random(120,600),random(120,600),random(120,600),random(120,600),random(120,600),random(120,600),random(120,600),random(120,600),random(120,600),random(120,600)]&gt;&gt;
+
+
+&lt;&lt;set $money to 1000&gt;&gt;
+&lt;&lt;set $cosbyShares to 0&gt;&gt;
+&lt;&lt;set $readState to [false,false,false]&gt;&gt;
+&lt;&lt;set $tweets to [&quot;Hello&quot;,&quot;Goodbye&quot;,&quot;What day is it&quot;]&gt;&gt;
+
+
+&lt;&lt;set $teaState to [false,false,false]&gt;&gt;</tw-passagedata>
+<tw-passagedata pid="3" name="random number" tags="" position="50,83">/* Here&#39;s a number from 0 to 10:
+&lt;&lt;set $randomNumber to random(0,10)&gt;&gt;
+
+My number is $randomNumber */
+</tw-passagedata>
+<tw-passagedata pid="4" name="arrays" tags="" position="221,121">&lt;&lt;if $readState[0] is false&gt;&gt;
+	$tweets[0]
+	&lt;&lt;set $readState[0] to  true&gt;&gt;
+&lt;&lt;elseif $readState[1] is false&gt;&gt;
+	$tweets[1]
+	&lt;&lt;set $readState[1] to  true&gt;&gt;
+&lt;&lt;elseif $readState[2] is false&gt;&gt;
+	$tweets[2]
+	&lt;&lt;set $readState[2] to  true&gt;&gt;
+&lt;&lt;else&gt;&gt;
+	No new tweets.
+&lt;&lt;/if&gt;&gt;
+
+[[Refresh the page!|arrays]]
+</tw-passagedata>
+<tw-passagedata pid="5" name="number loop" tags="" position="418,120">
+&lt;&lt;for $index = 0; $index &lt; 5; $index = $index+1&gt;&gt;
+	&lt;&lt;print $index&gt;&gt;
+&lt;&lt;/for&gt;&gt;
+&lt;&lt;print &quot;Loop is over!&quot;&gt;&gt;</tw-passagedata>
+<tw-passagedata pid="6" name="array with loop" tags="" position="596,113">/* This code will show one unread tweet and then mark it as read - functionally equivalent to the example in the Arrays section */
+
+&lt;&lt;nobr&gt;&gt;
+&lt;&lt;for $index = 0; $index &lt; $tweets.length; $index++&gt;&gt;
+	&lt;&lt;if $readState[$index] is false&gt;&gt;
+		&lt;&lt;set $readState[$index] to true&gt;&gt;
+		&lt;&lt;print $tweets[$index]&gt;&gt;
+		
+/* Break statement will exit the for loop so no more tweets are shown - the game will jump to right after the for macro*/			&lt;&lt;break&gt;&gt;
+	&lt;&lt;/if&gt;&gt;
+	
+/* Only reach here if no new tweets were shown! */	
+	&lt;&lt;if $index is $tweets.length - 1&gt;&gt;
+		No new tweets.
+	&lt;&lt;/if&gt;&gt;
+&lt;&lt;/for&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;
+[[refresh the page|array with loop]]</tw-passagedata>
+<tw-passagedata pid="7" name="array with loop multiple tweet" tags="" position="611,258">&lt;&lt;set $numberOfTweetsShown to 0&gt;&gt;
+&lt;&lt;set $maxTweetsToShow to 2&gt;&gt;
+&lt;&lt;for $index = 0; $index &lt; $tweets.length; $index++&gt;&gt;
+	&lt;&lt;if $readState[$index] is false&gt;&gt;
+		&lt;&lt;set $readState[$index] to true&gt;&gt;
+		&lt;&lt;print $tweets[$index]&gt;&gt;
+		&lt;&lt;run $numberOfTweetsShown++&gt;&gt;
+		&lt;&lt;if $numberOfTweetsShown is $maxTweetsToShow&gt;&gt;
+			&lt;&lt;break&gt;&gt;
+		&lt;&lt;/if&gt;&gt;
+
+	&lt;&lt;/if&gt;&gt;
+	&lt;&lt;if $index is $tweets.length - 1 and $numberOfTweetsShown is 0&gt;&gt;
+		No new tweets.
+	&lt;&lt;/if&gt;&gt;
+&lt;&lt;/for&gt;&gt;
+
+[[array with loop multiple tweet]]</tw-passagedata>
+<tw-passagedata pid="8" name="tea array" tags="" position="791,128">
+/* teaState has three ingredients, water, tea, sugar */
+
+
+If we don&#39;t have all the ingredients, then display &quot;tea not done&quot;
+Otherwise, display &quot;tea is done!&quot;
+
+/* Elsewhere in your game... */
+
+&lt;&lt;nobr&gt;&gt;
+
+&lt;&lt;set $teaState[0] to true&gt;&gt;
+&lt;&lt;set $teaState[1] to true&gt;&gt;
+&lt;&lt;set $teaState[2] to true&gt;&gt;
+
+
+&lt;&lt;set $teaIsDone to true&gt;&gt;
+
+&lt;&lt;for $i = 0; $i &lt; $teaState.length; $i++&gt;&gt;
+	&lt;&lt;if $teaState[$i] is false&gt;&gt;
+		&lt;&lt;set $teaIsDone to false&gt;&gt;
+	&lt;&lt;/if&gt;&gt;
+&lt;&lt;/for&gt;&gt;
+
+&lt;&lt;if $teaIsDone is true&gt;&gt;
+	Tea is done.
+&lt;&lt;else&gt;&gt;
+	Tea is not done!
+&lt;&lt;/if&gt;&gt;
+
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata>
+<tw-passagedata pid="9" name="TEXT INPUT" tags="" position="216,353">&lt;&lt;nobr&gt;&gt;
+&lt;&lt;set $nr to 0&gt;&gt;
+&lt;span id=&quot;buttonCounter&quot;&gt;Clicked $nr times.&lt;/span&gt;
+&lt;&lt;button &quot;Click me please&quot;&gt;&gt;
+  &lt;&lt;set $nr++&gt;&gt;
+  &lt;&lt;replace &quot;#buttonCounter&quot;&gt;&gt;Clicked $nr times.&lt;&lt;/replace&gt;&gt;
+&lt;&lt;/button&gt;&gt;
+&lt;&lt;set $pieVars = [false,false]&gt;&gt;
+&lt;&lt;set $favPie to &quot;none&quot;&gt;&gt;
+&lt;&lt;set $hatedPie to &quot;None&quot;&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;
+
+What pies do you enjoy?
+* Blueberry? &lt;&lt;checkbox &quot;$pieVars[0]&quot; false true checked&gt;&gt;
+* Cherry? &lt;&lt;checkbox &quot;$pieVars[1]&quot; false true&gt;&gt;
+
+What&#39;s your favorite pie?
+* Blueberry? &lt;&lt;radiobutton &quot;$favPie&quot; &quot;blueberry&quot; checked&gt;&gt;
+* Cherry? &lt;&lt;radiobutton &quot;$favPie&quot; &quot;cherry&quot;&gt;&gt;
+* Coconut cream? &lt;&lt;radiobutton &quot;$favPie&quot; &quot;coconut cream&quot;&gt;&gt;
+
+---
+Write a short essay about pies:
+&lt;&lt;textarea &quot;$pieEssay&quot; &quot;&quot;&gt;&gt;
+
+---
+
+What&#39;s your most hated pie? &lt;&lt;textbox &quot;$hatedPie&quot; &quot;Blueberry&quot;&gt;&gt;
+
+[[Output Results]]</tw-passagedata>
+<tw-passagedata pid="10" name="Output Results" tags="" position="216,503">Your liked pies: $pieVars
+You hate the pie: $hatedPie
+Your fav pie is $favPie
+
+Your pie essay is:
+&quot;$pieEssay&quot;
+</tw-passagedata>
+</tw-storydata>
